@@ -1,4 +1,7 @@
 {
+  "files": [
+    "src/**/*.ts"
+  ],
   "compilerOptions": {
     "module": "amd",
     "noImplicitAny": true,
@@ -18,11 +21,5 @@
       "es2015.symbol",
       "es2015.symbol.wellknown"
     ]
-  },
-  "include": [
-    "src/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  }
 }
