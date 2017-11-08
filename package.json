@@ -1,0 +1,25 @@
+{
+  "name": "discord-twitchbot",
+  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Will Dietrich",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-sourcemaps": "^2.6.1",
+    "gulp-typescript": "^3.2.3",
+    "typescript": "^2.6.1"
+  },
+  "dependencies": {
+    "@types/node": "^8.0.50",
+    "discord.js": "github:hydrabolt/discord.js",
+    "discord.js-commando": "github:Gawdl3y/discord.js-commando",
+    "sqlite": "^2.8.0",
+    "uws": "^0.14.5"
+  }
+}
