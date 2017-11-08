@@ -1,6 +1,5 @@
 import { CommandoClient } from "discord.js-commando";
 
-
 export class TwitchBot {
 
     private client: CommandoClient;
