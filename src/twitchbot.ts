@@ -1,6 +1,8 @@
 import { CommandoClient } from 'discord.js-commando';
 import * as path from 'path';
 
+const settings: { [key: string]: string } = require('../settings.json');
+
 export class TwitchBot {
 
     private client: CommandoClient = new CommandoClient({
@@ -15,6 +17,7 @@ export class TwitchBot {
             ])
             .registerDefaults()
             .registerCommandsIn(path.join(__dirname, 'commands'));
-    }
 
+        this.client.login(settings.token);
+    }
 }
