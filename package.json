@@ -11,6 +11,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^8.0.50",
+    "@types/sequelize": "^4.0.79",
     "del": "^3.0.0",
     "gulp": "^3.9.1",
     "gulp-sourcemaps": "^2.6.1",
@@ -18,9 +19,13 @@
     "typescript": "^2.6.1"
   },
   "dependencies": {
+    "@types/sqlite3": "^3.1.1",
+    "db-migrate": "^0.10.0-beta.24",
+    "db-migrate-sqlite3": "^0.2.1",
     "discord.js": "github:hydrabolt/discord.js",
     "discord.js-commando": "github:Gawdl3y/discord.js-commando",
-    "sqlite": "^2.8.0",
+    "sequelize": "^4.22.6",
+    "sqlite3": "^3.1.13",
     "uws": "^0.14.5"
   }
 }
