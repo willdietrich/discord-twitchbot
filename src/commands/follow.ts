@@ -1,4 +1,7 @@
 import {Command, CommandMessage, CommandoClient} from 'discord.js-commando'
+import { Models } from "../models";
+
+let Streamer = Models.streamer;
 
 interface FollowCommandArgs {
     handle: string;
@@ -25,9 +28,21 @@ export class Follow extends Command {
         });
     }
 
-    run(msg: CommandMessage, args: FollowCommandArgs) {
+    public async run(msg: CommandMessage, args: FollowCommandArgs) {
         const streamerHandle = args.handle;
-        // TODO process the add
-        return msg.reply(`Added streamer ${streamerHandle}`)
+
+        let response = `Unable to add streamer with handle ${streamerHandle}`;
+
+        let streamerInst = Streamer.build({
+            name: streamerHandle
+        });
+
+        console.log("Streamer: " + streamerInst.get({plain: true}).toString());
+
+        await streamerInst.save()
+            .then(() => response = `Added streamer: ${streamerHandle}`)
+            .catch((err: any) => console.log("Encountered an error: " + err));
+
+        return msg.reply(response)
     }
 }
