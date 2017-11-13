@@ -15,8 +15,8 @@ export class Follow extends Command {
             memberName: 'follow',
             description: 'Add a streamer to the registry.',
             examples: [
-                'follow [twitch name]',
-                'follow willeedee'
+                '!twitchbot follow [twitch name]',
+                '!twitchbot follow willeedee'
             ],
             args: [
                 {
@@ -36,8 +36,6 @@ export class Follow extends Command {
         let streamerInst = Streamer.build({
             name: streamerHandle
         });
-
-        console.log("Streamer: " + streamerInst.get({plain: true}).toString());
 
         await streamerInst.save()
             .then(() => response = `Added streamer: ${streamerHandle}`)
