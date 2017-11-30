@@ -1,16 +1,13 @@
-var del = require('del');
-var gulp = require('gulp');
-var sourcemaps = require('gulp-sourcemaps');
-var ts = require('gulp-typescript');
+let del = require('del');
+let gulp = require('gulp');
+let sourcemaps = require('gulp-sourcemaps');
+let ts = require('gulp-typescript');
+let tsProject = ts.createProject("tsconfig.json");
 
 gulp.task('default', function () {
     return gulp.src(['src/**/*.ts'], { base: 'src' })
         .pipe(sourcemaps.init())
-        .pipe(ts({
-            module: "CommonJS",
-            noImplicitAny: true,
-            target: "ES6"
-        }))
+        .pipe(tsProject())
         .pipe(sourcemaps.write())
         .pipe(gulp.dest('dist'));
 });
