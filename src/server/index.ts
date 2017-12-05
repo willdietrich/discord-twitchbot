@@ -12,7 +12,7 @@ export class Server {
     private client: CommandoClient;
     private app: Express;
 
-    public constructor(client: CommandoClient, services: Services) {
+    public constructor(client: CommandoClient) {
         this.client = client;
 
         const app = express();
