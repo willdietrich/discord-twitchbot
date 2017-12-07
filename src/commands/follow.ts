@@ -1,5 +1,5 @@
 import {Command, CommandMessage, CommandoClient} from 'discord.js-commando'
-import { Models } from "../models";
+import { Models } from "../sequelize";
 import {Services} from "../services";
 
 let Streamer = Models.streamer;

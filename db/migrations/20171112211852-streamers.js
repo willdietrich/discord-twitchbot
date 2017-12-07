@@ -19,7 +19,8 @@ exports.up = function(db) {
     id: {type: 'int', primaryKey: true, autoIncrement: true},
     name: 'string',
     createdAt: 'datetime',
-    updatedAt: 'datetime'
+    updatedAt: 'datetime',
+    deletedAt: 'datetime'
   });
 };
 

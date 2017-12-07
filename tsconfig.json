@@ -2,11 +2,13 @@
   "compilerOptions": {
     "module": "CommonJS",
     "noImplicitAny": true,
-    "target": "ES6",
+    "target": "es6",
     "lib": [
-      "ES6",
-      "ES5",
-      "ES2015"
-    ]
+      "es6",
+      "es5",
+      "es2015"
+    ],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   }
 }

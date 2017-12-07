@@ -1,9 +1,8 @@
 import {CommandoClient} from "discord.js-commando";
+import * as express from "express";
 import {Express} from "express";
-import {Models} from "../models";
 
 import * as bodyParser from 'body-parser';
-import * as express from 'express';
 
 import * as twitchApi from "./api/twitch";
 
@@ -18,8 +17,6 @@ export class Server {
         const app = express();
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({extended: true}));
-
-        app.set('models', Models);
 
         app.get("/api/streamer/online", twitchApi.getOnline);
 
