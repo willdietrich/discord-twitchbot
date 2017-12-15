@@ -1,8 +1,9 @@
 import {CommandoClient} from 'discord.js-commando';
+import * as path from "path";
+
 import {Server} from "./server";
 import {sequelize} from "./sequelize";
 import {settingsService} from "./services/SettingsService";
-import * as path from "path";
 
 export class TwitchBot {
 
@@ -22,7 +23,7 @@ export class TwitchBot {
             .registerDefaults()
             .registerCommandsIn(path.join(__dirname, 'commands'));
 
-        this.client.login(settingsService.getValue('token'));
+        this.client.login(settingsService.getValue('discord.client.token'));
 
         this.server = new Server(this.client);
     }
