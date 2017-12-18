@@ -4,6 +4,7 @@ import * as path from "path";
 import {Server} from "./server";
 import {sequelize} from "./sequelize";
 import {settingsService} from "./services/SettingsService";
+import {twitchOAuthService} from "./services/TwitchOAuthService";
 
 export class TwitchBot {
 
@@ -23,8 +24,10 @@ export class TwitchBot {
             .registerDefaults()
             .registerCommandsIn(path.join(__dirname, 'commands'));
 
-        this.client.login(settingsService.getValue('discord.client.token'));
+        // this.client.login(settingsService.getValue('discord.client.token'));
 
-        this.server = new Server(this.client);
+        // this.server = new Server(this.client);
+
+        twitchOAuthService.getAccessToken().then((token: string) => console.log(token));
     }
 }

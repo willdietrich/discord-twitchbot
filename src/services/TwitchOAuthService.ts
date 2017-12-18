@@ -1,54 +1,48 @@
-import {Promise} from 'bluebird';
-import * as http from 'http';
-import * as querystring from 'querystring';
-import * as url from 'url';
+import * as requestPromise from "request-promise";
 
 import {settingsService} from './SettingsService';
+
+interface TwitchOAuthResponse {
+    access_token: string,
+    refresh_token: string,
+    expires_in: number,
+    scope: string
+}
 
 class TwitchOAuthService {
     private readonly clientID = settingsService.getValue("twitch.client.id");
     private readonly clientSecret = settingsService.getValue("twitch.client.secret");
 
-    private readonly twitchOAuthHost = "https://api.twitch.tv";
-    private readonly twitchOAuthPath = "/kraken/oauth2/token/";
+    private readonly twitchOAuthURI = "https://api.twitch.tv/kraken/oauth2/token/";
 
-    private readonly twitchOAuthURL;
+    private readonly twitchOAuthOptions: requestPromise.Options;
 
     constructor() {
-        this.twitchOAuthURL = this.generateURL();
+        this.twitchOAuthOptions = this.generateRequestOptions();
     }
 
-    public getAccessToken(): Promise<string> {
-        return new Promise((resolve, reject) => {
-            let req = http.get(this.twitchOAuthURL, (res) => {
-                let {statusCode} = res;
+    public getAccessToken() {
+        console.log(this.twitchOAuthOptions);
 
-                if (statusCode !== 200) reject(new Error("Unable to retrieve access token."))
-
-                let rawData = [];
-                res.on('data', (chunk) => body.push(chunk));
-                res.on('end', () => {
-                    let body = body.join('');
-                    console.log(body);
-                    resolve(body);
-                });
+        return requestPromise(this.twitchOAuthOptions)
+            .then((res: TwitchOAuthResponse) => {
+                let {access_token} = res;
+                console.log(res);
+                return access_token;
             });
-
-            req.on('error', () => reject(err));
-        });
     }
 
-    private generateURL(): URL {
-        let url = new url.URL(this.twitchOAuthPath, this.twitchOAuthHost);
-
-        let queryString = querystring.stringify({
-            client_id: this.clientID,
-            client_sercret: this.clientSecret,
-            grant_type: "client_credentials"
-        });
-        url.search = queryString;
-
-        return url;
+    private generateRequestOptions(): requestPromise.Options {
+        return {
+            uri: this.twitchOAuthURI,
+            method: 'POST',
+            qs: {
+                client_id: this.clientID,
+                client_secret: this.clientSecret,
+                grant_type: "client_credentials"
+            },
+            json: true
+        };
     }
 }
 
