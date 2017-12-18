@@ -1,10 +1,11 @@
 import {CommandoClient} from 'discord.js-commando';
-import * as path from "path";
+import * as path from 'path';
 
-import {Server} from "./server";
-import {sequelize} from "./sequelize";
-import {settingsService} from "./services/SettingsService";
-import {twitchOAuthService} from "./services/TwitchOAuthService";
+import {Server} from './server';
+import {sequelize} from './sequelize';
+import {settingsService} from './services/SettingsService';
+import {streamerService} from './services/StreamerService';
+import {twitchService} from './services/TwitchSubscriptionService';
 
 export class TwitchBot {
 
@@ -24,10 +25,11 @@ export class TwitchBot {
             .registerDefaults()
             .registerCommandsIn(path.join(__dirname, 'commands'));
 
-        // this.client.login(settingsService.getValue('discord.client.token'));
+        this.client.login(settingsService.getValue('discord.client.token'));
 
-        // this.server = new Server(this.client);
+        this.server = new Server(this.client);
 
-        twitchOAuthService.getAccessToken().then((token: string) => console.log(token));
+        let streamers = streamerService.findAll().value();
+        twitchService.subscribeStreamersForNotifications(streamers);
     }
 }

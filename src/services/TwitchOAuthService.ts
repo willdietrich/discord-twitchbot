@@ -26,9 +26,7 @@ class TwitchOAuthService {
 
         return requestPromise(this.twitchOAuthOptions)
             .then((res: TwitchOAuthResponse) => {
-                let {access_token} = res;
-                console.log(res);
-                return access_token;
+                return res.access_token;
             });
     }
 
