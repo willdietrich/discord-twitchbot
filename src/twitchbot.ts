@@ -29,7 +29,7 @@ export class TwitchBot {
 
         this.server = new Server(this.client);
 
-        let streamers = streamerService.findAll().value();
-        twitchService.subscribeStreamersForNotifications(streamers);
+        // let streamers = streamerService.findAll().value();
+        // twitchService.subscribeStreamersForNotifications(streamers);
     }
 }

@@ -1,28 +1,32 @@
 import * as requestPromise from 'request-promise';
 import * as url from 'url';
-import {UriOptions} from 'request';
 
 import {Streamer} from '../models/Streamer';
+import {settingsService} from '../services/SettingsService';
 
 class TwitchService {
 
     private readonly twitchWebhooksURI = "https://api.twitch.tv/helix/webhooks/hub";
-    private readonly twitchStreamsTopicURI = "https://api.twitch.tv/helix/users/streams";
+    private readonly twitchStreamsTopicURI = "https://api.twitch.tv/helix/streams";
 
-    public executeTwitchRequest(reqOptions: UriOptions) {
+    public executeTwitchRequest(reqOptions: requestPromise.Options) {
         return requestPromise(reqOptions).value();
+    }
+
+    public subscribeStreamerForNotifications(streamer: Streamer) {
+        let streamerStatusOpts = this.generateSubscribeOptionsForStreamStatus(streamer.name);
+        this.executeTwitchRequest(streamerStatusOpts);
     }
 
     public subscribeStreamersForNotifications(streamers: Array<Streamer>) {
         streamers.forEach((streamer) => {
-            let streamerStatusOpts = this.generateSubscribeOptionsForStreamStatus(streamer.name);
-            this.executeTwitchRequest(streamerStatusOpts);
-        })
+            this.subscribeStreamerForNotifications(streamer);
+        });
     }
 
-    public generateSubscribeOptionsForStreamStatus(streamer: string) {
+    public generateSubscribeOptionsForStreamStatus(streamer: string): requestPromise.Options {
         let topicParamsObj = {
-            user_login: streamer
+            user_id: streamer
         };
         let topicParams = new url.URLSearchParams(topicParamsObj);
 
@@ -35,8 +39,11 @@ class TwitchService {
             qs: {
                 'hub.mode': 'subscribe',
                 'hub.topic': topicURL.toString(),
-                'hub.callback': 'http://walld.me/twitchbot/stream-status',
+                'hub.callback': 'http://walld.me/twitchbot/api/stream-status',
                 'hub.lease_seconds': 60
+            },
+            headers: {
+                "Client-ID": settingsService.getValue("twitch.client.id")
             },
             json: true
         };

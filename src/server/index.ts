@@ -14,12 +14,14 @@ export class Server {
     public constructor(client: CommandoClient) {
         this.client = client;
 
-        const app = express();
-        app.use(bodyParser.json());
-        app.use(bodyParser.urlencoded({extended: true}));
+        this.app = express();
+        this.app.disable("x-powered-by");
+        this.app.use(bodyParser.json());
+        this.app.use(bodyParser.urlencoded({extended: true}));
 
-        app.get("/api/streamer/online", twitchApi.getOnline);
+        this.app.get("/twitchbot/api/stream-status", twitchApi.getStreamStatus);
+        this.app.post("/twitchbot/api/stream-status", twitchApi.postStreamStatus);
 
-        app.listen('3000', () => console.log('Listening on port 3000'));
+        this.app.listen('3000', () => console.log('Listening on port 3000'));
     }
 }
