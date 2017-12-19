@@ -1,33 +1,17 @@
-import {CommandoClient} from 'discord.js-commando';
-import * as path from 'path';
-
 import {Server} from './server';
 import {sequelize} from './sequelize';
-import {settingsService} from './services/SettingsService';
-import {streamerService} from './services/StreamerService';
-import {twitchService} from './services/TwitchSubscriptionService';
+import {discordClientService} from './services/DiscordClientService';
 
 export class TwitchBot {
-
-    private client: CommandoClient = new CommandoClient({
-        owner: "347853274352844803",
-        commandPrefix: "!twitchbot"
-    });
 
     private server: Server;
     private sequelizeInst = sequelize;
 
     public start(): void {
-        this.client.registry
-            .registerGroups([
-                ['twitch', 'Twitch']
-            ])
-            .registerDefaults()
-            .registerCommandsIn(path.join(__dirname, 'commands'));
+        discordClientService.start();
 
-        this.client.login(settingsService.getValue('discord.client.token'));
-
-        this.server = new Server(this.client);
+        this.server = new Server();
+        this.server.start();
 
         // let streamers = streamerService.findAll().value();
         // twitchService.subscribeStreamersForNotifications(streamers);

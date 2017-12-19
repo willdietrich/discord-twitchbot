@@ -1,19 +1,12 @@
-import {CommandoClient} from "discord.js-commando";
-import * as express from "express";
-import {Express} from "express";
-
 import * as bodyParser from 'body-parser';
+import * as express from 'express';
 
 import * as twitchApi from "./api/twitch";
 
 export class Server {
+    private app: express.Express;
 
-    private client: CommandoClient;
-    private app: Express;
-
-    public constructor(client: CommandoClient) {
-        this.client = client;
-
+    public constructor() {
         this.app = express();
         this.app.disable("x-powered-by");
         this.app.use(bodyParser.json());
@@ -21,7 +14,9 @@ export class Server {
 
         this.app.get("/twitchbot/api/stream-status", twitchApi.getStreamStatus);
         this.app.post("/twitchbot/api/stream-status", twitchApi.postStreamStatus);
+    }
 
+    public start() {
         this.app.listen('3000', () => console.log('Listening on port 3000'));
     }
 }
