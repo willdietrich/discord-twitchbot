@@ -17,7 +17,9 @@ exports.setup = function(options, seedLink) {
 exports.up = function(db) {
   return db.createTable('streamers', {
     id: {type: 'int', primaryKey: true, autoIncrement: true},
-    name: 'string',
+    twitchID: 'int',
+    login: 'string',
+    displayName: 'string',
     createdAt: 'datetime',
     updatedAt: 'datetime',
     deletedAt: 'datetime'

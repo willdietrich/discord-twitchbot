@@ -1,6 +1,7 @@
 import * as requestPromise from "request-promise";
 
 import {settingsService} from './SettingsService';
+import Bluebird = require("bluebird");
 
 interface TwitchOAuthResponse {
     access_token: string,
@@ -21,9 +22,7 @@ class TwitchOAuthService {
         this.twitchOAuthOptions = this.generateRequestOptions();
     }
 
-    public getAccessToken() {
-        console.log(this.twitchOAuthOptions);
-
+    public getAccessToken(): Bluebird<string> {
         return requestPromise(this.twitchOAuthOptions)
             .then((res: TwitchOAuthResponse) => {
                 return res.access_token;

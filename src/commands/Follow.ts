@@ -1,8 +1,10 @@
-import {Command, CommandMessage, CommandoClient} from 'discord.js-commando'
+import {Command, CommandMessage, CommandoClient} from 'discord.js-commando';
+import {discordClientService} from "../services/DiscordClientService";
 import {streamerService} from "../services/StreamerService";
+import {twitchService, TwitchUserResponse} from "../services/TwitchService";
 
 interface FollowCommandArgs {
-    handle: string;
+    login: string;
 }
 
 export class Follow extends Command {
@@ -18,8 +20,8 @@ export class Follow extends Command {
             ],
             args: [
                 {
-                    key: 'handle',
-                    prompt: 'streamer handle',
+                    key: 'login',
+                    prompt: 'streamer login',
                     type: 'string'
                 }
             ]
@@ -27,13 +29,17 @@ export class Follow extends Command {
     }
 
     public async run(msg: CommandMessage, args: FollowCommandArgs) {
-        const streamerHandle = args.handle;
+        const streamerLogin = args.login;
 
-        let response = `Unable to add streamer with handle ${streamerHandle}`;
+        let response = `Unable to add streamer with login: ${streamerLogin}`;
 
-        let newStreamer = streamerService.addStreamer(streamerHandle);
-        response = `Added streamer: ${newStreamer.name}`;
+        let newStreamer = await twitchService.getUserInformation(streamerLogin)
+            .then((userInfo: TwitchUserResponse) => {
+                return streamerService.addStreamer(userInfo);
+            });
 
-        return msg.reply(response)
+        response = `Added streamer: ${newStreamer.displayName}`;
+
+        return discordClientService.responseChannel.send(response);
     }
 }

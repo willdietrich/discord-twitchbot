@@ -1,6 +1,8 @@
 import {Server} from './server';
 import {sequelize} from './sequelize';
 import {discordClientService} from './services/DiscordClientService';
+import {streamerService} from "./services/StreamerService";
+import {twitchService} from "./services/TwitchService";
 
 export class TwitchBot {
 

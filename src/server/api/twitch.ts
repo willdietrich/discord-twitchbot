@@ -1,5 +1,7 @@
 import {Request, Response} from 'express';
 
+import {discordClientService} from '../../services/DiscordClientService'
+
 /**
  * GET /twitchbot/api/stream-status
  * Twitch callback for when a streamer goes online.
@@ -15,5 +17,5 @@ export let getStreamStatus = (req: Request, res: Response) => {
  * Twitch callback for when a streamer goes online.
  */
 export let postStreamStatus = (req: Request, res: Response) => {
-    // TODO receive the response
+    let responseChannel = discordClientService.responseChannel.send("Streamer is active.");
 };

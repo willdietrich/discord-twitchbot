@@ -1,7 +1,11 @@
 {
   "defaultEnv": "local",
   "local": {
-    "driver": "sqlite3",
-    "filename": "../twitchbot.db3"
+    "host": "localhost",
+    "user": "twitchbotapp",
+    "password": "abcd123",
+    "database": "twitchbot",
+    "driver": "mysql",
+    "multipleStatements": true
   }
 }

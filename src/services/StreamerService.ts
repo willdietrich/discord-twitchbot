@@ -1,10 +1,15 @@
 import {Streamer} from "../models/Streamer";
 import * as Bluebird from 'bluebird';
+import {TwitchUserResponse} from "./TwitchService";
 
 class StreamerService {
 
-    public addStreamer(handle: String): Streamer {
-        let newStreamer = new Streamer({name: handle});
+    public addStreamer(userInfo: TwitchUserResponse): Streamer {
+        let newStreamer = new Streamer({
+            twitchID: parseInt(userInfo.id),
+            login: userInfo.login,
+            displayName: userInfo.display_name
+        });
         newStreamer.save();
 
         return newStreamer;

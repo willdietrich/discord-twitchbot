@@ -1,5 +1,7 @@
 import {Command, CommandMessage, CommandoClient} from 'discord.js-commando';
+import {discordClientService} from "../services/DiscordClientService";
 import {streamerService} from '../services/StreamerService';
+
 
 export class List extends Command {
     constructor(client: CommandoClient) {
@@ -20,10 +22,11 @@ export class List extends Command {
 
         let responseStr = "Following streamers:\n";
         streamers.forEach((streamer) => {
-            let streamerName = streamer.name;
+            let streamerName = streamer.displayName;
             responseStr += `• ${streamerName}\n`;
         });
 
-        return msg.reply(responseStr);
+        return discordClientService.responseChannel.send(responseStr);
+
     }
 }

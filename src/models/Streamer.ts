@@ -6,7 +6,13 @@ import {Column, CreatedAt, DeletedAt, Model, Table, UpdatedAt} from "sequelize-t
 export class Streamer extends Model<Streamer> {
 
     @Column
-    name: string;
+    twitchID: number;
+
+    @Column
+    login: string;
+
+    @Column
+    displayName: string;
 
     @CreatedAt
     createdAt: Date;
