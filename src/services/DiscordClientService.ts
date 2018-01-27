@@ -3,6 +3,7 @@ import {CommandoClient} from 'discord.js-commando';
 import * as path from 'path';
 
 import {settingsService} from './SettingsService';
+import {TwitchStreamResponse} from "./TwitchService";
 
 class DiscordClientService {
 
@@ -23,16 +24,20 @@ class DiscordClientService {
             .registerCommandsIn(path.join(__dirname, '../commands'));
     }
 
-    start() {
+    public start() {
         this.client.login(this.clientTokenID);
     }
 
-    getGuild(guildID: string): Guild {
+    public getGuild(guildID: string): Guild {
         return this.client.guilds.get(guildID);
     }
 
-    getChannel(channelID: string): TextChannel {
+    public getChannel(channelID: string): TextChannel {
         return this.guild.channels.get(channelID) as TextChannel;
+    }
+
+    public broadcastStreamStatus(streamStatus: Array<TwitchStreamResponse>) {
+        this.responseChannel.send()
     }
 
     get client(): CommandoClient {

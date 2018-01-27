@@ -29,11 +29,38 @@ class TwitchService {
         });
     }
 
-    public getUserInformation(displayName: String): Bluebird<TwitchUserResponse> {
+    public getUserInformation(displayName: string): Bluebird<TwitchUserResponse> {
         return this.generateUserInfoOptions(displayName)
             .then(userInfoOpts => {
                 return this.executeTwitchRequest(userInfoOpts)
                     .then(res => res.data[0]);
+        });
+    }
+
+    public getStreamStatusForStreamers(streamers: Array<Streamer>): Bluebird<Array<TwitchStreamResponse>> {
+        let userIDs = streamers.map(streamer => streamer.twitchID);
+        return this.generateStreamInfoOptions(userIDs)
+            .then((streamInfoOpts) => {
+                return this.executeTwitchRequest(streamInfoOpts)
+                    .then(res => res.data);
+            });
+    }
+
+    private generateStreamInfoOptions(userIDs: Array<number>): Bluebird<rp.Options> {
+        return twitchOAuthService.getAccessToken().then(token => {
+            return {
+                uri: this.twitchStreamsTopicURI,
+                method: 'GET',
+                qs: {
+                    'user_id': userIDs
+                },
+                qsStringifyOptions: {indices: false},
+                headers: {
+                    "Client-ID": settingsService.getValue("twitch.client.id"),
+                    "Authorization": `Bearer ${token}`
+                },
+                json: true
+            };
         });
     }
 
@@ -62,7 +89,7 @@ class TwitchService {
         });
     }
 
-    private generateUserInfoOptions(displayName: String): Bluebird<rp.Options> {
+    private generateUserInfoOptions(displayName: string): Bluebird<rp.Options> {
         return twitchOAuthService.getAccessToken().then(token => {
             return {
                 uri: this.twitchUserInfoURI,
@@ -81,6 +108,20 @@ class TwitchService {
 }
 
 export const twitchService = new TwitchService();
+
+export interface TwitchStreamResponse {
+    id: string,
+    streamer?: string,
+    user_id: string,
+    game_id: string,
+    community_ids: Array<string>,
+    type: string,
+    title: string,
+    viewer_count: number,
+    started_at: Date,
+    language: string,
+    thumbnail_url: string
+}
 
 export interface TwitchUserResponse {
     id: string,

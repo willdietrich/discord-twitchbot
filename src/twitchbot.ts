@@ -15,7 +15,7 @@ export class TwitchBot {
         this.server = new Server();
         this.server.start();
 
-        // let streamers = streamerService.findAll().value();
+        let streamers = streamerService.announceSavedStreamers();
         // twitchService.subscribeStreamersForNotifications(streamers);
     }
 }
