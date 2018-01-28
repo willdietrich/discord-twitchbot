@@ -3,6 +3,7 @@ import {sequelize} from './sequelize';
 import {discordClientService} from './services/DiscordClientService';
 import {streamerService} from "./services/StreamerService";
 import {twitchService} from "./services/TwitchService";
+import {announceService} from "./services/AnnounceService";
 
 export class TwitchBot {
 
@@ -10,12 +11,16 @@ export class TwitchBot {
     private sequelizeInst = sequelize;
 
     public start(): void {
-        discordClientService.start();
+        discordClientService.start()
+            .then(status => {
+                streamerService.followedStreamersStatus()
+                    .then(streams => {
+                        announceService.announceStreamsStatus(streams);
+                    });
+            });
 
         this.server = new Server();
         this.server.start();
-
-        let streamers = streamerService.announceSavedStreamers();
         // twitchService.subscribeStreamersForNotifications(streamers);
     }
 }

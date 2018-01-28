@@ -3,7 +3,7 @@ import * as rp from 'request-promise';
 import * as url from 'url';
 
 import {Streamer} from '../models/Streamer';
-import {settingsService} from '../services/SettingsService';
+import {settingsService} from './SettingsService';
 import {twitchOAuthService} from "./TwitchOAuthService";
 import Bluebird = require("bluebird");
 
@@ -17,7 +17,7 @@ class TwitchService {
         return rp(reqOptions);
     }
 
-    public subscribeStreamerForNotifications(streamer: Streamer) {
+    public subscribeStreamerForNotifications(streamer: Streamer): void {
         this.generateSubscribeOptionsForStreamStatus(streamer.id).then((streamerStatusOpts) => {
             this.executeTwitchRequest(streamerStatusOpts).then(() => console.log("Subscribed streamer for notifications."));
         });
@@ -111,7 +111,7 @@ export const twitchService = new TwitchService();
 
 export interface TwitchStreamResponse {
     id: string,
-    streamer?: string,
+    streamer?: Streamer,
     user_id: string,
     game_id: string,
     community_ids: Array<string>,

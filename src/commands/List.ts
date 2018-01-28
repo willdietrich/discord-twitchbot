@@ -1,6 +1,6 @@
-import {Command, CommandMessage, CommandoClient} from 'discord.js-commando';
-import {discordClientService} from "../services/DiscordClientService";
 import {streamerService} from '../services/StreamerService';
+import {Command, CommandMessage, CommandoClient} from 'discord.js-commando';
+import {announceService} from "../services/AnnounceService";
 
 
 export class List extends Command {
@@ -17,16 +17,9 @@ export class List extends Command {
     }
 
     public async run(msg: CommandMessage) {
-        streamerService.findAll();
-        let streamers = await streamerService.findAll();
-
-        let responseStr = "Following streamers:\n";
-        streamers.forEach((streamer) => {
-            let streamerName = streamer.displayName;
-            responseStr += `• ${streamerName}\n`;
-        });
-
-        return discordClientService.responseChannel.send(responseStr);
-
+        return streamerService.findAllNotDeleted()
+            .then(streamers => {
+                return announceService.announceFollowedStreamers(streamers);
+            });
     }
 }

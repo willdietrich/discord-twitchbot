@@ -25,7 +25,7 @@ class DiscordClientService {
     }
 
     public start() {
-        this.client.login(this.clientTokenID);
+        return this.client.login(this.clientTokenID);
     }
 
     public getGuild(guildID: string): Guild {
