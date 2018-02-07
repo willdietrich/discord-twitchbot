@@ -18,7 +18,7 @@ class TwitchService {
     }
 
     public subscribeStreamerForNotifications(streamer: Streamer): void {
-        this.generateSubscribeOptionsForStreamStatus(streamer.id).then((streamerStatusOpts) => {
+        this.generateSubscribeOptionsForStreamStatus(streamer).then((streamerStatusOpts) => {
             this.executeTwitchRequest(streamerStatusOpts).then(() => console.log("Subscribed streamer for notifications."));
         });
     }
@@ -64,9 +64,9 @@ class TwitchService {
         });
     }
 
-    private generateSubscribeOptionsForStreamStatus(streamerID: string): Bluebird<rp.Options> {
+    private generateSubscribeOptionsForStreamStatus(streamer: Streamer): Bluebird<rp.Options> {
         let topicParamsObj = {
-            user_id: streamerID
+            user_id: streamer.twitchID.toString()
         };
         let topicParams = new url.URLSearchParams(topicParamsObj);
 
@@ -79,8 +79,8 @@ class TwitchService {
             qs: {
                 'hub.mode': 'subscribe',
                 'hub.topic': topicURL.toString(),
-                'hub.callback': 'http://walld.me/twitchbot/api/stream-status',
-                'hub.lease_seconds': 60
+                'hub.callback': 'http://107.2.89.89:3030/twitchbot/api/stream-status',
+                'hub.lease_seconds': 3600
             },
             headers: {
                 "Client-ID": settingsService.getValue("twitch.client.id")

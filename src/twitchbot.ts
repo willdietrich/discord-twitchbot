@@ -21,6 +21,10 @@ export class TwitchBot {
 
         this.server = new Server();
         this.server.start();
-        // twitchService.subscribeStreamersForNotifications(streamers);
+
+        streamerService.findAllNotDeleted()
+            .then(streamers => {
+                twitchService.subscribeStreamersForNotifications(streamers);
+            });
     }
 }

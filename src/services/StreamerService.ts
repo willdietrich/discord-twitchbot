@@ -39,6 +39,14 @@ class StreamerService {
         });
     }
 
+    public findStreamerByTwitchID(twitchID: string): Bluebird<Streamer> {
+        return Streamer.findOne({
+            where: {
+                twitchID: twitchID
+            }
+        });
+    }
+
     public followedStreamersStatus(): Bluebird<Array<TwitchStreamResponse>> {
         return this.findAllNotDeleted()
             .then(streamers => {
@@ -50,6 +58,19 @@ class StreamerService {
 
                         return streams;
                     });
+            });
+    }
+
+    public getStreamersForStreamStatus(streams: Array<TwitchStreamResponse>): Bluebird<Array<TwitchStreamResponse>> {
+        return Bluebird.resolve(streams)
+            .map((stream: TwitchStreamResponse) => this.findStreamerByTwitchID(stream.user_id))
+            .map((streamer: Streamer) => {
+                let stream = streams.find((stream: TwitchStreamResponse) =>
+                    stream.user_id === streamer.twitchID.toString()
+                );
+
+                stream.streamer = streamer;
+                return stream;
             });
     }
 }

@@ -1,6 +1,9 @@
 import {Request, Response} from 'express';
 
 import {discordClientService} from '../../services/DiscordClientService'
+import {announceService} from "../../services/AnnounceService";
+import {TwitchStreamResponse} from "../../services/TwitchService";
+import {streamerService} from "../../services/StreamerService";
 
 /**
  * GET /twitchbot/api/stream-status
@@ -17,5 +20,9 @@ export let getStreamStatus = (req: Request, res: Response) => {
  * Twitch callback for when a streamer goes online.
  */
 export let postStreamStatus = (req: Request, res: Response) => {
-    let responseChannel = discordClientService.responseChannel.send("Streamer is active.");
+    let streamStatus: Array<TwitchStreamResponse> = req.body['data'];
+    console.log("Received notification: " + JSON.stringify(req.body));
+    streamerService.getStreamersForStreamStatus(streamStatus)
+        .then(streams => announceService.announceStreamsStatus(streams));
+    res.send();
 };
