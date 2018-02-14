@@ -1,3 +1,8 @@
 {
-  "token": "<token>"
+  "discord.client.owner": "",
+  "discord.client.token": "",
+  "discord.client.guildID": "",
+  "discord.client.responseChannelID": "",
+  "twitch.client.id": "",
+  "twitch.client.secret": ""
 }
